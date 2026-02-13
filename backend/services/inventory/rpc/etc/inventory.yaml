@@ -1,0 +1,5 @@
+Name: inventory-rpc
+ListenOn: 0.0.0.0:9903
+DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_inventory?sslmode=disable"
+Cache:
+  - Host: 47.106.219.62:6379

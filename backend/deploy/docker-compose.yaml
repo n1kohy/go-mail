@@ -1,0 +1,245 @@
+services:
+  # ================= User =================
+  user-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/user/api/user.go
+        CONFIG_FILE: services/user/api/etc/user-api.yaml
+    ports:
+      - "8801:8801"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  user-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/user/rpc/user.go
+        CONFIG_FILE: services/user/rpc/etc/user.yaml
+    ports:
+      - "9901:9901"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Auth =================
+  auth-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/auth/api/auth.go
+        CONFIG_FILE: services/auth/api/etc/auth-api.yaml
+    ports:
+      - "8802:8802"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Product =================
+  product-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/product/api/product.go
+        CONFIG_FILE: services/product/api/etc/product-api.yaml
+    ports:
+      - "8803:8803"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  product-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/product/rpc/product.go
+        CONFIG_FILE: services/product/rpc/etc/product.yaml
+    ports:
+      - "9902:9902"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Inventory =================
+  inventory-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/inventory/rpc/inventory.go
+        CONFIG_FILE: services/inventory/rpc/etc/inventory.yaml
+    ports:
+      - "9903:9903"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Search =================
+  search-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/search/api/search.go
+        CONFIG_FILE: services/search/api/etc/search-api.yaml
+    ports:
+      - "8804:8804"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Cart =================
+  cart-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/cart/api/cart.go
+        CONFIG_FILE: services/cart/api/etc/cart-api.yaml
+    ports:
+      - "8805:8805"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  cart-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/cart/rpc/cart.go
+        CONFIG_FILE: services/cart/rpc/etc/cart.yaml
+    ports:
+      - "9904:9904"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Promotion =================
+  promotion-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/promotion/api/promotion.go
+        CONFIG_FILE: services/promotion/api/etc/promotion-api.yaml
+    ports:
+      - "8806:8806"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  promotion-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/promotion/rpc/promotion.go
+        CONFIG_FILE: services/promotion/rpc/etc/promotion.yaml
+    ports:
+      - "9905:9905"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Order =================
+  order-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/order/api/order.go
+        CONFIG_FILE: services/order/api/etc/order-api.yaml
+    ports:
+      - "8807:8807"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  order-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/order/rpc/order.go
+        CONFIG_FILE: services/order/rpc/etc/order.yaml
+    ports:
+      - "9906:9906"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Payment =================
+  payment-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/payment/api/payment.go
+        CONFIG_FILE: services/payment/api/etc/payment-api.yaml
+    ports:
+      - "8808:8808"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  payment-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/payment/rpc/payment.go
+        CONFIG_FILE: services/payment/rpc/etc/payment.yaml
+    ports:
+      - "9907:9907"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Seckill =================
+  seckill-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/seckill/api/seckill.go
+        CONFIG_FILE: services/seckill/api/etc/seckill-api.yaml
+    ports:
+      - "8809:8809"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  # ================= Logistics =================
+  logistics-api:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/logistics/api/logistics.go
+        CONFIG_FILE: services/logistics/api/etc/logistics-api.yaml
+    ports:
+      - "8810:8810"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  logistics-rpc:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+      args:
+        SERVICE_PATH: services/logistics/rpc/logistics.go
+        CONFIG_FILE: services/logistics/rpc/etc/logistics.yaml
+    ports:
+      - "9908:9908"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always

@@ -1,0 +1,61 @@
+syntax = "v1"
+
+info (
+	title:   "搜索服务"
+	desc:    "商品搜索、联想、热搜"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 商品搜索请求
+	SearchProductReq {
+		Keyword string `form:"keyword" validate:"required"`
+		Page    int    `form:"page,default=1"`
+		Size    int    `form:"size,default=20"`
+	}
+	// 搜索结果项
+	SearchProductItem {
+		Id    int64   `json:"id"`
+		Name  string  `json:"name"`
+		Price float64 `json:"price"`
+		Image string  `json:"image"`
+	}
+	// 商品搜索响应
+	SearchProductResp {
+		List  []SearchProductItem `json:"list"`
+		Total int64               `json:"total"`
+	}
+	// 搜索联想请求
+	SearchSuggestReq {
+		Keyword string `form:"keyword" validate:"required"`
+	}
+	// 搜索联想响应
+	SearchSuggestResp {
+		Suggestions []string `json:"suggestions"`
+	}
+	// 热搜词响应
+	SearchHotResp {
+		Keywords []string `json:"keywords"`
+	}
+)
+
+// 搜索接口 — 全部公开
+@server (
+	prefix: /api/v1
+	group:  search
+)
+service search-api {
+	@doc "商品搜索"
+	@handler SearchProduct
+	get /search/product (SearchProductReq) returns (SearchProductResp)
+
+	@doc "搜索联想"
+	@handler SearchSuggest
+	get /search/suggest (SearchSuggestReq) returns (SearchSuggestResp)
+
+	@doc "热搜词"
+	@handler SearchHot
+	get /search/hot returns (SearchHotResp)
+}
+

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package logistics;
+option go_package = "./logistics";
+
+// 物流 RPC 服务 — 供 Order 查询物流信息
+service LogisticsRpc {
+  // 根据订单号查询物流
+  rpc GetLogisticsByOrderId(GetLogisticsByOrderIdReq) returns (GetLogisticsByOrderIdResp);
+}
+
+message GetLogisticsByOrderIdReq {
+  string order_id = 1;
+}
+
+message GetLogisticsByOrderIdResp {
+  int64  id          = 1;
+  string order_id    = 2;
+  string tracking_no = 3;
+  string carrier     = 4;
+  int32  status      = 5;
+}

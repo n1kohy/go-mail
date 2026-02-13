@@ -1,0 +1,92 @@
+syntax = "v1"
+
+info (
+	title:   "用户服务 API"
+	desc:    "用户注册、信息查询、地址管理"
+	author:  "go-mail"
+	version: "v1"
+)
+
+// ---------- 类型定义 ----------
+type (
+	// 注册请求
+	RegisterReq {
+		Username string `json:"username" validate:"required,min=3,max=20"`
+		Password string `json:"password" validate:"required,min=6"`
+		Mobile   string `json:"mobile" validate:"required,len=11"`
+	}
+	// 注册响应
+	RegisterResp {
+		UserId int64 `json:"user_id"`
+	}
+	// 用户信息响应
+	UserInfoResp {
+		Id          int64  `json:"id"`
+		Username    string `json:"username"`
+		Mobile      string `json:"mobile"`
+		Avatar      string `json:"avatar"`
+		Gender      int    `json:"gender"`
+		MemberLevel int    `json:"member_level"`
+	}
+	// 新增地址请求
+	AddAddressReq {
+		Receiver  string `json:"receiver" validate:"required"`
+		Phone     string `json:"phone" validate:"required,len=11"`
+		Province  string `json:"province" validate:"required"`
+		City      string `json:"city" validate:"required"`
+		District  string `json:"district" validate:"required"`
+		Detail    string `json:"detail" validate:"required"`
+		IsDefault int    `json:"is_default,default=0"`
+	}
+	// 新增地址响应
+	AddAddressResp {
+		Id int64 `json:"id"`
+	}
+	// 地址项
+	AddressItem {
+		Id        int64  `json:"id"`
+		Receiver  string `json:"receiver"`
+		Phone     string `json:"phone"`
+		Province  string `json:"province"`
+		City      string `json:"city"`
+		District  string `json:"district"`
+		Detail    string `json:"detail"`
+		IsDefault int    `json:"is_default"`
+	}
+	// 地址列表响应
+	AddressListResp {
+		List []AddressItem `json:"list"`
+	}
+)
+
+// ---------- 公开路由（无需 JWT） ----------
+@server (
+	prefix: /api/v1
+	group:  user
+)
+service user-api {
+	@doc "用户注册"
+	@handler Register
+	post /user/register (RegisterReq) returns (RegisterResp)
+}
+
+// ---------- 受保护路由（需要 JWT） ----------
+@server (
+	prefix: /api/v1
+	group:  user
+	jwt:    Auth
+)
+service user-api {
+	@doc "获取用户信息"
+	@handler GetUserInfo
+	get /user/info returns (UserInfoResp)
+
+	@doc "新增收货地址"
+	@handler AddAddress
+	post /user/address/add (AddAddressReq) returns (AddAddressResp)
+
+	@doc "获取地址列表"
+	@handler GetAddressList
+	get /user/address/list returns (AddressListResp)
+}
+

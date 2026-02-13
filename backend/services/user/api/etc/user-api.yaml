@@ -1,0 +1,14 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8801
+
+# PostgreSQL 数据库连�?DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_user?sslmode=disable"
+
+# Redis 缓存
+Cache:
+  - Host: 47.106.219.62:6379
+
+# JWT 配置
+Auth:
+  AccessSecret: "go-mail-jwt-secret-2026"
+  AccessExpire: 86400

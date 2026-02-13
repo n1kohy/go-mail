@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package product;
+option go_package = "./product";
+
+// 商品 RPC 服务 — 供 Cart/Order 等内部服务调用
+service ProductRpc {
+  // 根据 ID 查询单个商品
+  rpc GetProduct(GetProductReq) returns (GetProductResp);
+  // 根据 ID 列表批量查询商品
+  rpc GetProductsByIds(GetProductsByIdsReq) returns (GetProductsByIdsResp);
+}
+
+message GetProductReq {
+  int64 id = 1;
+}
+
+message GetProductResp {
+  int64  id          = 1;
+  string name        = 2;
+  string main_image  = 3;
+  int64  category_id = 4;
+  int32  status      = 5;
+}
+
+message GetProductsByIdsReq {
+  repeated int64 ids = 1;
+}
+
+message GetProductsByIdsResp {
+  repeated GetProductResp products = 1;
+}

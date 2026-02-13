@@ -1,0 +1,12 @@
+Name: logistics-api
+Host: 0.0.0.0
+Port: 8810
+DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_logistics?sslmode=disable"
+Cache:
+  - Host: 47.106.219.62:6379
+Auth:
+  AccessSecret: "go-mail-jwt-secret-2026"
+  AccessExpire: 86400
+OrderRpcConf:
+  Endpoints:
+    - localhost:9906

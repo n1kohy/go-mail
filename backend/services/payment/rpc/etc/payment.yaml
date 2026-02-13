@@ -1,0 +1,5 @@
+Name: payment-rpc
+ListenOn: 0.0.0.0:9907
+DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_payment?sslmode=disable"
+Cache:
+  - Host: 47.106.219.62:6379

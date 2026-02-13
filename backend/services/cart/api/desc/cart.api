@@ -1,0 +1,78 @@
+syntax = "v1"
+
+info (
+	title:   "购物车服务"
+	desc:    "购物车增删改查"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 加入购物车请求
+	CartAddReq {
+		SkuId    int64 `json:"sku_id" validate:"required"`
+		Quantity int   `json:"quantity" validate:"required,min=1"`
+	}
+	// 加入购物车响应
+	CartAddResp {
+		Msg string `json:"msg"`
+	}
+	// 购物车列表项
+	CartItem {
+		Id          int64   `json:"id"`
+		SkuId       int64   `json:"sku_id"`
+		ProductId   int64   `json:"product_id"`
+		ProductName string  `json:"product_name"`
+		Specs       string  `json:"specs"`
+		Price       float64 `json:"price"`
+		Quantity    int     `json:"quantity"`
+		Selected    bool    `json:"selected"`
+	}
+	// 购物车列表响应
+	CartListResp {
+		Items       []CartItem `json:"items"`
+		TotalAmount float64    `json:"total_amount"`
+	}
+	// 更新数量请求
+	CartUpdateReq {
+		SkuId    int64 `json:"sku_id" validate:"required"`
+		Quantity int   `json:"quantity" validate:"required,min=1"`
+	}
+	// 更新数量响应
+	CartUpdateResp {
+		Msg string `json:"msg"`
+	}
+	// 删除商品请求
+	CartDeleteReq {
+		SkuIds []int64 `json:"sku_ids" validate:"required"`
+	}
+	// 删除商品响应
+	CartDeleteResp {
+		Msg string `json:"msg"`
+	}
+)
+
+// 购物车接口 — 全部需要 JWT
+@server (
+	prefix: /api/v1
+	group:  cart
+	jwt:    Auth
+)
+service cart-api {
+	@doc "加入购物车"
+	@handler CartAdd
+	post /cart/add (CartAddReq) returns (CartAddResp)
+
+	@doc "购物车列表"
+	@handler CartList
+	get /cart/list returns (CartListResp)
+
+	@doc "修改数量"
+	@handler CartUpdate
+	put /cart/update (CartUpdateReq) returns (CartUpdateResp)
+
+	@doc "删除商品"
+	@handler CartDelete
+	delete /cart/delete (CartDeleteReq) returns (CartDeleteResp)
+}
+

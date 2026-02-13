@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package order;
+option go_package = "./order";
+
+// 订单 RPC 服务 — 供 Payment/Logistics 调用
+service OrderRpc {
+  // 查询订单
+  rpc GetOrder(GetOrderReq) returns (GetOrderResp);
+  // 更新订单状态
+  rpc UpdateOrderStatus(UpdateOrderStatusReq) returns (UpdateOrderStatusResp);
+}
+
+message GetOrderReq {
+  string order_id = 1;
+}
+
+message GetOrderResp {
+  string order_id   = 1;
+  int64  user_id    = 2;
+  double pay_amount = 3;
+  int32  status     = 4;
+}
+
+message UpdateOrderStatusReq {
+  string order_id = 1;
+  int32  status   = 2;
+}
+
+message UpdateOrderStatusResp {
+  bool success = 1;
+}

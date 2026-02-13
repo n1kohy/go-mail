@@ -1,0 +1,67 @@
+syntax = "v1"
+
+info (
+	title:   "支付服务"
+	desc:    "支付、回调、退款"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 发起支付请求
+	PayReq {
+		OrderId string `json:"order_id" validate:"required"`
+		Channel int    `json:"channel" validate:"required"`
+	}
+	// 发起支付响应
+	PayResp {
+		PayUrl string `json:"pay_url"`
+	}
+	// 支付回调请求
+	PayCallbackReq {
+		OrderId string  `json:"order_id"`
+		TradeNo string  `json:"trade_no"`
+		Amount  float64 `json:"amount"`
+		Status  int     `json:"status"`
+	}
+	PayCallbackResp {
+		Msg string `json:"msg"`
+	}
+	// 退款请求
+	RefundReq {
+		OrderId string  `json:"order_id" validate:"required"`
+		Amount  float64 `json:"amount" validate:"required"`
+		Reason  string  `json:"reason,optional"`
+	}
+	RefundResp {
+		Msg string `json:"msg"`
+	}
+)
+
+// 支付回调 — 第三方调用，无 JWT
+@server (
+	prefix: /api/v1
+	group:  payment
+)
+service payment-api {
+	@doc "支付回调"
+	@handler PayCallback
+	post /payment/callback (PayCallbackReq) returns (PayCallbackResp)
+}
+
+// 支付接口 — JWT 保护
+@server (
+	prefix: /api/v1
+	group:  payment
+	jwt:    Auth
+)
+service payment-api {
+	@doc "发起支付"
+	@handler Pay
+	post /payment/pay (PayReq) returns (PayResp)
+
+	@doc "退款"
+	@handler Refund
+	post /payment/refund (RefundReq) returns (RefundResp)
+}
+

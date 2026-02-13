@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package user;
+option go_package = "./user";
+
+// 用户 RPC 服务
+// 供 Auth、Order 等其他服务内部调用
+service UserRpc {
+  // 根据 ID 查询用户
+  rpc GetUser(GetUserReq) returns (GetUserResp);
+  // 根据手机号查询用户
+  rpc GetUserByMobile(GetUserByMobileReq) returns (GetUserResp);
+  // 根据用户名查询用户
+  rpc GetUserByUsername(GetUserByUsernameReq) returns (GetUserResp);
+}
+
+message GetUserReq {
+  int64 id = 1;
+}
+
+message GetUserByMobileReq {
+  string mobile = 1;
+}
+
+message GetUserByUsernameReq {
+  string username = 1;
+}
+
+message GetUserResp {
+  int64  id           = 1;
+  string username     = 2;
+  string password     = 3; // 加密后的密码（仅内部使用）
+  string mobile       = 4;
+  string avatar       = 5;
+  int32  gender       = 6;
+  int32  role         = 7;
+  int32  member_level = 8;
+}

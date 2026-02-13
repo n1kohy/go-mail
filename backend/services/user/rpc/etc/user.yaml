@@ -1,0 +1,8 @@
+Name: user-rpc
+ListenOn: 0.0.0.0:9901
+
+# PostgreSQL 数据库连�?DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_user?sslmode=disable"
+
+# Redis 缓存
+Cache:
+  - Host: 47.106.219.62:6379

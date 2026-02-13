@@ -1,0 +1,63 @@
+syntax = "v1"
+
+info (
+	title:   "商品服务"
+	desc:    "商品列表、商品详情"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 商品列表请求
+	ProductListReq {
+		CategoryId int64 `form:"category_id,optional"`
+		Page       int   `form:"page,default=1"`
+		Size       int   `form:"size,default=20"`
+	}
+	// 商品列表项
+	ProductListItem {
+		Id        int64   `json:"id"`
+		Name      string  `json:"name"`
+		MainImage string  `json:"main_image"`
+		Price     float64 `json:"price"`
+	}
+	// 商品列表响应
+	ProductListResp {
+		List  []ProductListItem `json:"list"`
+		Total int64             `json:"total"`
+	}
+	// SKU 详情
+	SkuItem {
+		SkuId int64   `json:"sku_id"`
+		Specs string  `json:"specs"`
+		Price float64 `json:"price"`
+		Image string  `json:"image"`
+	}
+	// 商品详情响应
+	ProductDetailResp {
+		Id         int64     `json:"id"`
+		Name       string    `json:"name"`
+		SubTitle   string    `json:"sub_title"`
+		MainImage  string    `json:"main_image"`
+		DetailHtml string    `json:"detail_html"`
+		Category   string    `json:"category"`
+		Status     int       `json:"status"`
+		Skus       []SkuItem `json:"skus"`
+	}
+)
+
+// 商品接口 — 全部公开（无需 JWT）
+@server (
+	prefix: /api/v1
+	group:  product
+)
+service product-api {
+	@doc "商品列表（支持分类筛选+分页）"
+	@handler ProductList
+	get /product/list (ProductListReq) returns (ProductListResp)
+
+	@doc "商品详情（SPU+SKU 联查）"
+	@handler ProductDetail
+	get /product/:id returns (ProductDetailResp)
+}
+

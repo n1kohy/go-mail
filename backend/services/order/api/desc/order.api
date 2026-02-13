@@ -1,0 +1,99 @@
+syntax = "v1"
+
+info (
+	title:   "订单服务"
+	desc:    "订单创建、查询、取消"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 订单商品项
+	OrderItemReq {
+		SkuId    int64 `json:"sku_id" validate:"required"`
+		Quantity int   `json:"quantity" validate:"required,min=1"`
+	}
+	// 创建订单请求
+	CreateOrderReq {
+		AddressId int64          `json:"address_id" validate:"required"`
+		CouponId  int64          `json:"coupon_id,optional"`
+		Items     []OrderItemReq `json:"items" validate:"required"`
+		Remark    string         `json:"remark,optional"`
+	}
+	// 创建订单响应
+	CreateOrderResp {
+		OrderId    string  `json:"order_id"`
+		PayAmount  float64 `json:"pay_amount"`
+		ExpireTime string  `json:"expire_time"`
+	}
+	// 订单明细项
+	OrderItemInfo {
+		SkuId       int64   `json:"sku_id"`
+		ProductName string  `json:"product_name"`
+		Specs       string  `json:"specs"`
+		Price       float64 `json:"price"`
+		Quantity    int     `json:"quantity"`
+	}
+	// 订单详情响应
+	OrderDetailResp {
+		OrderId        string          `json:"order_id"`
+		Status         int             `json:"status"`
+		TotalAmount    float64         `json:"total_amount"`
+		DiscountAmount float64         `json:"discount_amount"`
+		FreightAmount  float64         `json:"freight_amount"`
+		PayAmount      float64         `json:"pay_amount"`
+		Items          []OrderItemInfo `json:"items"`
+		CreateTime     string          `json:"create_time"`
+	}
+	// 订单列表请求
+	OrderListReq {
+		Status int `form:"status,default=-1"`
+		Page   int `form:"page,default=1"`
+		Size   int `form:"size,default=10"`
+	}
+	// 订单列表项
+	OrderListItem {
+		OrderId    string  `json:"order_id"`
+		Status     int     `json:"status"`
+		PayAmount  float64 `json:"pay_amount"`
+		ItemCount  int     `json:"item_count"`
+		CreateTime string  `json:"create_time"`
+	}
+	OrderListResp {
+		List  []OrderListItem `json:"list"`
+		Total int64           `json:"total"`
+	}
+	// 取消订单请求
+	CancelOrderReq {
+		OrderId string `json:"order_id" validate:"required"`
+		Reason  string `json:"reason,optional"`
+	}
+	CancelOrderResp {
+		Msg string `json:"msg"`
+	}
+)
+
+// 订单接口 — 全部需要 JWT
+@server (
+	prefix: /api/v1
+	group:  order
+	jwt:    Auth
+)
+service order-api {
+	@doc "创建订单"
+	@handler CreateOrder
+	post /order/create (CreateOrderReq) returns (CreateOrderResp)
+
+	@doc "订单详情"
+	@handler OrderDetail
+	get /order/:id returns (OrderDetailResp)
+
+	@doc "订单列表"
+	@handler OrderList
+	get /order/list (OrderListReq) returns (OrderListResp)
+
+	@doc "取消订单"
+	@handler CancelOrder
+	post /order/cancel (CancelOrderReq) returns (CancelOrderResp)
+}
+

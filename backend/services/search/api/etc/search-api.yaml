@@ -1,0 +1,6 @@
+Name: search-api
+Host: 0.0.0.0
+Port: 8804
+DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_product?sslmode=disable"
+Cache:
+  - Host: 47.106.219.62:6379

@@ -1,0 +1,46 @@
+syntax = "v1"
+
+info (
+	title:   "秒杀服务"
+	desc:    "秒杀抢购、查询结果"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 执行秒杀请求
+	SeckillActionReq {
+		SkuId int64 `json:"sku_id" validate:"required"`
+	}
+	// 执行秒杀响应
+	SeckillActionResp {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	// 查询秒杀结果请求
+	SeckillResultReq {
+		SkuId int64 `form:"sku_id" validate:"required"`
+	}
+	// 查询秒杀结果响应
+	SeckillResultResp {
+		Status  int    `json:"status"`
+		OrderId string `json:"order_id"`
+	}
+)
+
+// 秒杀接口 — 全部 JWT
+@server (
+	prefix: /api/v1
+	group:  seckill
+	jwt:    Auth
+)
+service seckill-api {
+	@doc "执行秒杀"
+	@handler SeckillAction
+	post /seckill/action (SeckillActionReq) returns (SeckillActionResp)
+
+	@doc "查询秒杀结果"
+	@handler SeckillResult
+	get /seckill/result (SeckillResultReq) returns (SeckillResultResp)
+}
+

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package cart;
+option go_package = "./cart";
+
+// 购物车 RPC 服务 — 供 Order 服务调用
+service CartRpc {
+  // 获取用户购物车中选中的商品
+  rpc GetCartItems(GetCartItemsReq) returns (GetCartItemsResp);
+  // 清空用户购物车中指定商品（下单成功后调用）
+  rpc ClearCartItems(ClearCartItemsReq) returns (ClearCartItemsResp);
+}
+
+message GetCartItemsReq {
+  int64 user_id = 1;
+}
+
+message CartItemInfo {
+  int64  sku_id       = 1;
+  int64  product_id   = 2;
+  string product_name = 3;
+  string sku_specs    = 4;
+  double price        = 5;
+  int32  quantity     = 6;
+}
+
+message GetCartItemsResp {
+  repeated CartItemInfo items = 1;
+}
+
+message ClearCartItemsReq {
+  int64          user_id = 1;
+  repeated int64 sku_ids = 2;
+}
+
+message ClearCartItemsResp {
+  bool success = 1;
+}

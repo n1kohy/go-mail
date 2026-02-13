@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package inventory;
+option go_package = "./inventory";
+
+// 库存 RPC 服务 — 仅内部调用
+service InventoryRpc {
+  // 查询 SKU 库存
+  rpc GetStock(GetStockReq) returns (GetStockResp);
+  // 扣减库存（下单时调用）
+  rpc DeductStock(DeductStockReq) returns (DeductStockResp);
+  // 回滚库存（取消订单时调用）
+  rpc RollbackStock(RollbackStockReq) returns (RollbackStockResp);
+}
+
+message GetStockReq {
+  int64 sku_id = 1;
+}
+
+message GetStockResp {
+  int64 sku_id    = 1;
+  int32 total     = 2;
+  int32 available = 3;
+  int32 locked    = 4;
+}
+
+message DeductStockReq {
+  int64 sku_id   = 1;
+  int32 quantity = 2;
+}
+
+message DeductStockResp {
+  bool success = 1;
+}
+
+message RollbackStockReq {
+  int64 sku_id   = 1;
+  int32 quantity = 2;
+}
+
+message RollbackStockResp {
+  bool success = 1;
+}

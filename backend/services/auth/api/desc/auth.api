@@ -1,0 +1,60 @@
+syntax = "v1"
+
+info (
+	title:   "认证服务 API"
+	desc:    "登录、Token 刷新、注销"
+	author:  "go-mail"
+	version: "v1"
+)
+
+// ---------- 类型定义 ----------
+type (
+	// 登录请求
+	LoginReq {
+		Username string `json:"username" validate:"required"`
+		Password string `json:"password" validate:"required"`
+	}
+	// 登录响应
+	LoginResp {
+		Token        string `json:"token"`
+		RefreshToken string `json:"refresh_token"`
+		ExpireIn     int64  `json:"expire_in"`
+	}
+	// 刷新请求
+	RefreshReq {
+		RefreshToken string `json:"refresh_token" validate:"required"`
+	}
+	// 刷新响应
+	RefreshResp {
+		Token    string `json:"token"`
+		ExpireIn int64  `json:"expire_in"`
+	}
+)
+
+// ---------- 公开路由（无需 JWT）----------
+@server (
+	prefix: /api/v1
+	group:  auth
+)
+service auth-api {
+	@doc "用户登录"
+	@handler Login
+	post /auth/login (LoginReq) returns (LoginResp)
+
+	@doc "刷新 Token"
+	@handler Refresh
+	post /auth/refresh (RefreshReq) returns (RefreshResp)
+}
+
+// ---------- 受保护路由（需要 JWT）----------
+@server (
+	prefix: /api/v1
+	group:  auth
+	jwt:    Auth
+)
+service auth-api {
+	@doc "注销登录"
+	@handler Logout
+	post /auth/logout
+}
+

@@ -1,0 +1,21 @@
+Name: order-api
+Host: 0.0.0.0
+Port: 8807
+DataSource: "postgres://postgres:123456@47.106.219.62:5432/db_order?sslmode=disable"
+Cache:
+  - Host: 47.106.219.62:6379
+Auth:
+  AccessSecret: "go-mail-jwt-secret-2026"
+  AccessExpire: 86400
+CartRpcConf:
+  Endpoints:
+    - localhost:9904
+ProductRpcConf:
+  Endpoints:
+    - localhost:9902
+InventoryRpcConf:
+  Endpoints:
+    - localhost:9903
+PromotionRpcConf:
+  Endpoints:
+    - localhost:9905

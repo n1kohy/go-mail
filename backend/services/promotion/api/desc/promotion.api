@@ -1,0 +1,76 @@
+syntax = "v1"
+
+info (
+	title:   "营销服务"
+	desc:    "优惠券管理"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 优惠券项
+	CouponItem {
+		Id        int64   `json:"id"`
+		Name      string  `json:"name"`
+		Type      int     `json:"type"`
+		Threshold float64 `json:"threshold"`
+		Discount  float64 `json:"discount"`
+		EndTime   string  `json:"end_time"`
+	}
+	// 优惠券列表响应
+	CouponListResp {
+		List []CouponItem `json:"list"`
+	}
+	// 领取优惠券请求
+	CouponClaimReq {
+		CouponId int64 `json:"coupon_id" validate:"required"`
+	}
+	CouponClaimResp {
+		Msg string `json:"msg"`
+	}
+	// 我的优惠券请求
+	CouponMineReq {
+		Status int `form:"status,default=0"`
+	}
+	// 我的优惠券项
+	MyCouponItem {
+		Id        int64   `json:"id"`
+		CouponId  int64   `json:"coupon_id"`
+		Name      string  `json:"name"`
+		Threshold float64 `json:"threshold"`
+		Discount  float64 `json:"discount"`
+		Status    int     `json:"status"`
+		EndTime   string  `json:"end_time"`
+	}
+	CouponMineResp {
+		List []MyCouponItem `json:"list"`
+	}
+)
+
+// 优惠券 — 公开接口
+@server (
+	prefix: /api/v1
+	group:  promotion
+)
+service promotion-api {
+	@doc "可领优惠券列表"
+	@handler CouponList
+	get /coupon/list returns (CouponListResp)
+}
+
+// 优惠券 — JWT 保护
+@server (
+	prefix: /api/v1
+	group:  promotion
+	jwt:    Auth
+)
+service promotion-api {
+	@doc "领取优惠券"
+	@handler CouponClaim
+	post /coupon/claim (CouponClaimReq) returns (CouponClaimResp)
+
+	@doc "我的优惠券"
+	@handler CouponMine
+	get /coupon/mine (CouponMineReq) returns (CouponMineResp)
+}
+

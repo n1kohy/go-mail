@@ -1,0 +1,45 @@
+syntax = "v1"
+
+info (
+	title:   "物流服务"
+	desc:    "发货、物流详情查询"
+	author:  "go-mail"
+	version: "v1"
+)
+
+type (
+	// 发货请求
+	ShipReq {
+		OrderId    string `json:"order_id" validate:"required"`
+		Carrier    string `json:"carrier" validate:"required"`
+		TrackingNo string `json:"tracking_no" validate:"required"`
+	}
+	ShipResp {
+		Msg string `json:"msg"`
+	}
+	// 物流详情响应
+	LogisticsDetailResp {
+		OrderId    string `json:"order_id"`
+		TrackingNo string `json:"tracking_no"`
+		Carrier    string `json:"carrier"`
+		Status     int    `json:"status"`
+		CreateTime string `json:"create_time"`
+	}
+)
+
+// 物流接口 — JWT 保护
+@server (
+	prefix: /api/v1
+	group:  logistics
+	jwt:    Auth
+)
+service logistics-api {
+	@doc "发货"
+	@handler Ship
+	post /logistics/send (ShipReq) returns (ShipResp)
+
+	@doc "物流详情"
+	@handler LogisticsDetail
+	get /logistics/detail/:id returns (LogisticsDetailResp)
+}
+
